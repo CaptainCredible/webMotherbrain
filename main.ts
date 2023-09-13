@@ -22,13 +22,6 @@ function parseSerial(stringy: string) {
     for (let i = 0; i < stringyArray.length; i++) {
         let thisData = stringyArray[i]
         switch (thisData[0]) {
-            case "s":
-                // SOLO OFF
-                solo = false
-                //basic.showIcon(IconNames.Heart,0)
-                displayResetTimer = input.runningTime()
-                radio.sendValue("uma", 0) // unmute musicians
-                break
             case "n":
                 let noteBits = 0b0000000000000000
                 for (let i = 1; i < thisData.length; i++) {
@@ -42,11 +35,13 @@ function parseSerial(stringy: string) {
                 break
             case "M":
                 //MUTE ON
+                radio.setGroup(83)
                 radio.sendValue("m",0b100000000) // mute thumpers
                 mute = true
                 break
             case "m":
                 //MUTE Off
+                radio.setGroup(83)
                 radio.sendValue("m", 0b000000000) // unmute thumpers
                 mute = false
                 break
@@ -54,8 +49,17 @@ function parseSerial(stringy: string) {
                 // SOLO ON
                 solo = true
                 let soloMusicianNumber = parseInt("" + thisData[1] + thisData[2])
+                radio.setGroup(84)
                 radio.sendValue("ms", soloMusicianNumber) // unmute musicians
                 //console.log("solo musician " + soloMusicianNumber)
+                break
+            case "s":
+                // SOLO OFF
+                solo = false
+                //basic.showIcon(IconNames.Heart,0)
+                displayResetTimer = input.runningTime()
+                radio.setGroup(84)
+                radio.sendValue("uma", 0) // unmute musicians
                 break
             case "t":
                 let stepNumber = parseInt("" + thisData[1] + thisData[2])
@@ -79,7 +83,7 @@ function parseSerial(stringy: string) {
 }
 
 basic.forever(function() {
-updateMuteAndSoloLeds
+updateMuteAndSoloLeds()
 })
 
 function updateMuteAndSoloLeds(){
