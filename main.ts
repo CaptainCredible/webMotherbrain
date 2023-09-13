@@ -79,14 +79,18 @@ function parseSerial(stringy: string) {
 }
 
 basic.forever(function() {
-    if(input.runningTime()>displayResetTimer + 50){
+updateMuteAndSoloLeds
+})
+
+function updateMuteAndSoloLeds(){
+    if (input.runningTime() > displayResetTimer + 50) {
         basic.clearScreen()
-        led.plot(2,2)
-        if(mute){
-            led.plot(2,0)
+        led.plot(2, 2)
+        if (mute) {
+            led.plot(2, 0)
         }
-        if(solo){
+        if (solo) {
             led.plot(2, 4)
         }
     }
-})
+}
